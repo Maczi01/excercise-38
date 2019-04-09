@@ -22,14 +22,14 @@ public class OfferController {
     public List<Offer> getAllOffers(){
         return offerRepository.findAll();
     }
-
-    @GetMapping("/api/offers")
-    public List<Offer> search(@RequestParam(required = false) String title){
-        if(title !=null){
-            return offerRepository.findByTitle(title);
-        }
-        return offerRepository.findAll();
-    }
+//TODO
+//    @GetMapping("/api/offers")
+//    public List<Offer> search(@RequestParam(required = false) String title){
+//        if(title !=null){
+//            return offerRepository.findByTitle(title);
+//        }
+//        return offerRepository.findAll();
+//    }
 
     @GetMapping("/api/offers/count")
     public Long counter(){
@@ -37,7 +37,7 @@ public class OfferController {
     }
 
     @GetMapping("/api/offers/{id}")
-    public ResponseEntity<Offer> getAllOffers(@PathVariable Long id){
+    public ResponseEntity<Offer> getOfferBy(@PathVariable Long id){
         Optional<Offer> optionalOffer = offerRepository.findById(id);
         if(optionalOffer.isPresent()){
             Offer offer = optionalOffer.get();
@@ -46,25 +46,37 @@ public class OfferController {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping("/api/add")
-    public ResponseEntity<Offer> add(@RequestBody Offer offer){
-        if(offer.getTitle()!=null){
-            return ResponseEntity.badRequest().build();
-        }
-
-        Offer savedoffer = offerRepository.save(offer);
-        return ResponseEntity.ok(savedoffer);
-    }
-//    @PostMapping("/add")
-//    public List<Category> add(@RequestBody Category category){
-//        return categoryRepository.findAll();
+//    @PostMapping("/api/offers")
+//    @ResponseBody
+//    public ResponseEntity<Offer> add(@RequestBody Offer offer){
+//        if(offer.getTitle()!=null){
+//            return ResponseEntity.badRequest().build();
+//        }
+//        Offer savedoffer = offerRepository.save(offer);
+//        return ResponseEntity.ok(savedoffer);
 //    }
+
+
+    @PostMapping("/api/offers")
+    @ResponseBody
+    public ResponseEntity<Offer> addOffer(@RequestBody Offer offer){
+        if (offer.getId() !=null){
+            ResponseEntity.BodyBuilder bodyBuilder = ResponseEntity.badRequest();
+            bodyBuilder.build();
+        }
+        Offer save = offerRepository.save(offer);
+        return ResponseEntity.ok(save);
+    }
 
     @GetMapping("/api/categories")
     public List<Category> getAllCat(){
         return categoryRepository.findAll();
     }
 
+    @DeleteMapping("api/offers/{id}")
+    public void deleteOffer(@PathVariable Long id){
+        offerRepository.deleteById(id);
+    }
 
 
 

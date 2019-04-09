@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface OfferRepository extends JpaRepository<Offer, Long> {
 
-        List<Offer> findByTitle(String title);
+//        List<Offer> findByTitle(String title);
 
 }
