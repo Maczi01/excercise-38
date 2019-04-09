@@ -3,7 +3,6 @@ package pl.mati.demo;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.NamedStoredProcedureQuery;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +23,19 @@ public class OfferController {
         return offerRepository.findAll();
     }
 
+    @GetMapping("/api/offers")
+    public List<Offer> search(@RequestParam(required = false) String title){
+        if(title !=null){
+            return offerRepository.findByTitle(title);
+        }
+        return offerRepository.findAll();
+    }
+
+    @GetMapping("/api/offers/count")
+    public Long counter(){
+        return offerRepository.count();
+    }
+
     @GetMapping("/api/offers/{id}")
     public ResponseEntity<Offer> getAllOffers(@PathVariable Long id){
         Optional<Offer> optionalOffer = offerRepository.findById(id);
@@ -39,7 +51,7 @@ public class OfferController {
         if(offer.getTitle()!=null){
             return ResponseEntity.badRequest().build();
         }
-        
+
         Offer savedoffer = offerRepository.save(offer);
         return ResponseEntity.ok(savedoffer);
     }
